@@ -40,11 +40,9 @@ class Server:
     def initialize_sockets(self):
         # UDP socket
         self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,
-                                   1)  # Allows the socket to reuse the same ip and port
-        self.udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST,
-                                   1)  # Allow the socket send broadcast messages
-        self.udp_socket.bind(("", 0))  # Bind to any available port
+        self.udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)  # Allows the socket to reuse the same ip and port
+        self.udp_socket.bind((socket.gethostbyname(socket.gethostname()), 0))  # Bind to any available port
+        self.udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST,1)  # Allow the socket send broadcast messages
         self.udp_port = self.udp_socket.getsockname()[1]
 
         # TCP socket
@@ -132,7 +130,7 @@ class Server:
         try:
             # Check for user interruptions and use stop_event to signal the thread to exit the loop gracefully
             while not STOP_EVENT.is_set():
-                self.udp_socket.sendto(offer_msg, ('<broadcast>', UDP_BROADCAST_PORT))  # Send the offer message
+                self.udp_socket.sendto(offer_msg, ('255.255.255.255', UDP_BROADCAST_PORT))  # Send the offer message
                 print(
                     f"{Colors.OKPEACH}[Server] Sent offer message on UDP port {UDP_BROADCAST_PORT}{Colors.ENDC}")
                 time.sleep(1)  # wait 1 second between broadcasts
