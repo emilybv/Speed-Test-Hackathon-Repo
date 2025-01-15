@@ -28,7 +28,7 @@ class Client:
     MESSAGE_TYPE_OFFER = 0x2
     MESSAGE_TYPE_REQUEST = 0x3
     MESSAGE_TYPE_PAYLOAD = 0x4
-    PACKET_SIZE = 65536
+    PACKET_SIZE = 1024
 
     def __init__(self):
         """
